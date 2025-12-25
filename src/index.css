@@ -104,20 +104,20 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     letter-spacing: -0.01em;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Syne', system-ui, sans-serif;
+    font-family: 'Outfit', system-ui, sans-serif;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
   }
 
   /* Monospace for numbers and data */
   .font-mono {
-    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-family: 'Space Mono', 'SF Mono', monospace;
     font-feature-settings: "tnum";
   }
 }
@@ -255,14 +255,38 @@
     opacity: 1;
   }
 
-  /* Premium hover states */
+  /* Premium hover states - enhanced */
   .hover-lift {
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
   .hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px hsl(0 0% 0% / 0.4);
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 50px hsl(0 0% 0% / 0.5), 0 0 30px hsl(168 76% 46% / 0.15);
+    border-color: hsl(168 76% 46% / 0.3);
+  }
+
+  /* Enhanced interactive hover */
+  .hover-glow {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 30px hsl(168 76% 46% / 0.25);
+    border-color: hsl(168 76% 46% / 0.5);
+  }
+
+  /* Scale hover for icons/buttons */
+  .hover-scale {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.08);
+  }
+
+  .hover-scale:active {
+    transform: scale(0.95);
   }
 }
 

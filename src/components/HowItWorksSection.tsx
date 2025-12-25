@@ -1,25 +1,30 @@
 import { Button } from "@/components/ui/button";
 import { Wallet, MousePointerClick, CheckCircle } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useWallet } from "@/contexts/WalletContext";
 
 const HowItWorksSection = () => {
+  const { t } = useLanguage();
+  const { connect, connected, connecting } = useWallet();
+
   const steps = [
     {
       number: "01",
       icon: Wallet,
-      title: "Connecter votre wallet",
-      description: "Connectez votre wallet Phantom ou Solflare en un clic sécurisé.",
+      title: t('how.step1.title'),
+      description: t('how.step1.desc'),
     },
     {
       number: "02",
       icon: MousePointerClick,
-      title: "Sélectionner l'action",
-      description: "Choisissez Claim ou Burn et indiquez la quantité de SOL.",
+      title: t('how.step2.title'),
+      description: t('how.step2.desc'),
     },
     {
       number: "03",
       icon: CheckCircle,
-      title: "Confirmer la transaction",
-      description: "Signez la transaction dans votre wallet et suivez-la sur Solscan.",
+      title: t('how.step3.title'),
+      description: t('how.step3.desc'),
     },
   ];
 
@@ -28,10 +33,10 @@ const HowItWorksSection = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-display text-display-sm md:text-display-md mb-6 text-balance">
-            Comment ça <span className="text-gradient">marche</span>
+            {t('how.title')} <span className="text-gradient">{t('how.title2')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Trois étapes simples pour gérer vos SOL.
+            {t('how.subtitle')}
           </p>
         </div>
 
@@ -45,7 +50,7 @@ const HowItWorksSection = () => {
                 )}
                 
                 {/* Step number */}
-                <div className="relative inline-flex items-center justify-center w-24 h-24 rounded-2xl glass-card mb-6 group-hover:shadow-glow transition-shadow duration-300">
+                <div className="relative inline-flex items-center justify-center w-24 h-24 rounded-2xl glass-card mb-6 group-hover:shadow-glow transition-all duration-300 hover-lift">
                   <span className="font-display text-3xl font-bold text-gradient">{step.number}</span>
                 </div>
                 
@@ -56,8 +61,15 @@ const HowItWorksSection = () => {
           </div>
 
           <div className="text-center">
-            <Button variant="premium" size="xl">
-              Commencer maintenant
+            <Button 
+              variant="premium" 
+              size="xl"
+              onClick={connect}
+              disabled={connecting || connected}
+              className="group"
+            >
+              <Wallet className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              {connected ? t('header.connected') : t('how.cta')}
             </Button>
           </div>
         </div>

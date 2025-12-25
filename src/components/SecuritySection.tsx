@@ -1,26 +1,29 @@
 import { Code, Shield, Key, AlertTriangle } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const SecuritySection = () => {
+  const { t } = useLanguage();
+
   const features = [
     {
       icon: Code,
-      title: "Open-source",
-      description: "Tous nos smart contracts sont open-source et vérifiables publiquement.",
+      title: t('security.opensource.title'),
+      description: t('security.opensource.desc'),
     },
     {
       icon: Shield,
-      title: "Audits à venir",
-      description: "Nos contrats seront audités par des firmes de sécurité reconnues.",
+      title: t('security.audit.title'),
+      description: t('security.audit.desc'),
     },
     {
       icon: Key,
-      title: "Signature locale",
-      description: "Vos clés privées restent dans votre wallet. Nous ne les voyons jamais.",
+      title: t('security.local.title'),
+      description: t('security.local.desc'),
     },
     {
       icon: AlertTriangle,
-      title: "Anti-phishing",
-      description: "Vérifiez toujours l'URL et ne partagez jamais votre seed phrase.",
+      title: t('security.phishing.title'),
+      description: t('security.phishing.desc'),
     },
   ];
 
@@ -29,10 +32,10 @@ const SecuritySection = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-display text-display-sm md:text-display-md mb-6 text-balance">
-            Sécurité & <span className="text-gradient">Conformité</span>
+            {t('security.title')} <span className="text-gradient">{t('security.title2')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Votre sécurité est notre priorité absolue.
+            {t('security.subtitle')}
           </p>
         </div>
 
@@ -42,7 +45,7 @@ const SecuritySection = () => {
               key={index}
               className="p-6 rounded-2xl glass-card hover-lift text-center border-glow"
             >
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto mb-5">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto mb-5 transition-all duration-300 group-hover:scale-110 hover:scale-110">
                 <feature.icon className="w-7 h-7 text-primary" />
               </div>
               <h3 className="font-display text-lg font-bold mb-3">{feature.title}</h3>

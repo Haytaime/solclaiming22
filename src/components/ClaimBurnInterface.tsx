@@ -1,32 +1,46 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Flame, ArrowDown } from "lucide-react";
+import { Flame, ArrowDown, Wallet } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useWallet } from "@/contexts/WalletContext";
 
 const ClaimBurnInterface = () => {
   const [mode, setMode] = useState<"claim" | "burn">("claim");
   const [amount, setAmount] = useState("");
+  const { t } = useLanguage();
+  const { connected, balance, connect, connecting } = useWallet();
 
   return (
     <section id="claim" className="py-24 lg:py-32">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-display text-display-sm md:text-display-md mb-6 text-balance">
-            Interface <span className="text-gradient">Claim / Burn</span>
+            {t('interface.title')} <span className="text-gradient">{t('interface.title2')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Gérez vos SOL directement depuis cette interface sécurisée.
+            {t('interface.subtitle')}
           </p>
         </div>
 
         <div className="max-w-lg mx-auto">
-          <div className="p-8 rounded-3xl glass-card">
+          <div className="p-8 rounded-3xl glass-card hover-glow">
+            {/* Balance display when connected */}
+            {connected && balance !== null && (
+              <div className="mb-6 p-4 rounded-xl bg-primary/10 border border-primary/20">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">{t('interface.balance')}</span>
+                  <span className="font-mono font-bold text-lg text-primary">{balance.toFixed(4)} SOL</span>
+                </div>
+              </div>
+            )}
+
             {/* Mode selector */}
             <div className="mb-8">
-              <label className="block text-sm text-muted-foreground mb-3 font-medium">Mode</label>
+              <label className="block text-sm text-muted-foreground mb-3 font-medium">{t('interface.mode')}</label>
               <div className="flex rounded-xl bg-muted/50 p-1.5">
                 <button
                   onClick={() => setMode("claim")}
-                  className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                  className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 hover-scale ${
                     mode === "claim"
                       ? "bg-gradient-to-r from-primary to-primary-light text-primary-foreground shadow-glow"
                       : "text-muted-foreground hover:text-foreground"
@@ -36,7 +50,7 @@ const ClaimBurnInterface = () => {
                 </button>
                 <button
                   onClick={() => setMode("burn")}
-                  className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                  className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 hover-scale ${
                     mode === "burn"
                       ? "bg-gradient-to-r from-primary to-primary-light text-primary-foreground shadow-glow"
                       : "text-muted-foreground hover:text-foreground"
@@ -50,7 +64,7 @@ const ClaimBurnInterface = () => {
             {/* Amount input */}
             <div className="mb-8">
               <label className="block text-sm text-muted-foreground mb-3 font-medium">
-                Quantité (SOL)
+                {t('interface.amount')}
               </label>
               <div className="relative">
                 <input
@@ -58,25 +72,34 @@ const ClaimBurnInterface = () => {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full bg-muted/50 border border-border/50 rounded-xl px-5 py-4 text-lg font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
+                  className="w-full bg-muted/50 border border-border/50 rounded-xl px-5 py-4 text-lg font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all hover:border-primary/30"
                 />
-                <button className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-primary font-semibold hover:text-primary-light transition-colors">
+                <button 
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-primary font-semibold hover:text-primary-light transition-all duration-300 hover:scale-105 active:scale-95"
+                  onClick={() => balance && setAmount(balance.toString())}
+                >
                   Max
                 </button>
               </div>
             </div>
 
             {/* Connect button */}
-            <Button variant="premium" size="xl" className="w-full">
+            <Button 
+              variant="premium" 
+              size="xl" 
+              className="w-full group"
+              onClick={connected ? undefined : connect}
+              disabled={connecting}
+            >
               {mode === "claim" ? (
                 <>
-                  <ArrowDown className="w-5 h-5" />
-                  Connecter votre wallet
+                  <ArrowDown className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  {connected ? 'Claim SOL' : t('interface.connect')}
                 </>
               ) : (
                 <>
-                  <Flame className="w-5 h-5" />
-                  Connecter votre wallet
+                  <Flame className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  {connected ? 'Burn SOL' : t('interface.connect')}
                 </>
               )}
             </Button>

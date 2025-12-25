@@ -1,24 +1,27 @@
 import { Shield, Zap, Eye } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const WhyUsSection = () => {
+  const { t } = useLanguage();
+
   const features = [
     {
       icon: Shield,
-      title: "Sécurité Maximale",
-      description: "Smart contracts open-source, audits à venir. Vos clés privées ne quittent jamais votre wallet.",
-      link: "Voir la sécurité",
+      title: t('why.security.title'),
+      description: t('why.security.desc'),
+      link: t('why.security.link'),
     },
     {
       icon: Zap,
-      title: "Rapidité Optimale",
-      description: "Transactions traitées en moins de 30 secondes grâce à la puissance du réseau Solana.",
-      link: "Essayer maintenant",
+      title: t('why.speed.title'),
+      description: t('why.speed.desc'),
+      link: t('why.speed.link'),
     },
     {
       icon: Eye,
-      title: "Transparence Totale",
-      description: "Tous les frais sont affichés avant confirmation. Aucun coût caché, jamais.",
-      link: "En savoir plus",
+      title: t('why.transparency.title'),
+      description: t('why.transparency.desc'),
+      link: t('why.transparency.link'),
     },
   ];
 
@@ -27,10 +30,10 @@ const WhyUsSection = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-display text-display-sm md:text-display-md mb-6 text-balance">
-            Pourquoi nous <span className="text-gradient">choisir</span>
+            {t('why.title')} <span className="text-gradient">{t('why.title2')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Une plateforme conçue pour la simplicité, la sécurité et la transparence.
+            {t('why.subtitle')}
           </p>
         </div>
 
@@ -40,14 +43,14 @@ const WhyUsSection = () => {
               key={index}
               className="group relative p-8 rounded-2xl glass-card hover-lift border-glow"
             >
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-6 group-hover:from-primary/30 group-hover:to-primary/10 transition-all duration-300">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-6 group-hover:from-primary/30 group-hover:to-primary/10 transition-all duration-300 group-hover:scale-110">
                 <feature.icon className="w-7 h-7 text-primary" />
               </div>
               <h3 className="font-display text-xl font-bold mb-3">{feature.title}</h3>
               <p className="text-muted-foreground mb-6 leading-relaxed">{feature.description}</p>
               <a
                 href="#"
-                className="inline-flex items-center gap-2 text-primary text-sm font-semibold group-hover:gap-3 transition-all"
+                className="inline-flex items-center gap-2 text-primary text-sm font-semibold group-hover:gap-3 transition-all duration-300"
               >
                 {feature.link}
                 <span className="text-primary">→</span>
