@@ -4,29 +4,17 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const FAQSection = () => {
+  const { t } = useLanguage();
+
   const faqs = [
-    {
-      question: "Quels wallets sont supportés ?",
-      answer: "Nous supportons actuellement Phantom et Solflare. D'autres wallets seront ajoutés prochainement.",
-    },
-    {
-      question: "Y a-t-il des frais ?",
-      answer: "Oui, des frais de réseau Solana s'appliquent (généralement < 0.001 SOL). Tous les frais sont affichés avant confirmation.",
-    },
-    {
-      question: "Est-ce sécurisé ?",
-      answer: "Nos smart contracts sont open-source et seront audités. Vos clés privées restent toujours dans votre wallet.",
-    },
-    {
-      question: "Combien de temps prend une transaction ?",
-      answer: "Les transactions sont généralement traitées en moins de 30 secondes, selon la congestion du réseau Solana.",
-    },
-    {
-      question: "Puis-je annuler une transaction ?",
-      answer: "Une fois confirmée sur la blockchain, une transaction ne peut pas être annulée. Vérifiez toujours les détails avant de signer.",
-    },
+    { question: t('faq.q1'), answer: t('faq.a1') },
+    { question: t('faq.q2'), answer: t('faq.a2') },
+    { question: t('faq.q3'), answer: t('faq.a3') },
+    { question: t('faq.q4'), answer: t('faq.a4') },
+    { question: t('faq.q5'), answer: t('faq.a5') },
   ];
 
   return (
@@ -34,10 +22,10 @@ const FAQSection = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="font-display text-display-sm md:text-display-md mb-6 text-balance">
-            Questions <span className="text-gradient">fréquentes</span>
+            {t('faq.title')} <span className="text-gradient">{t('faq.title2')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Tout ce que vous devez savoir pour commencer.
+            {t('faq.subtitle')}
           </p>
         </div>
 
@@ -47,7 +35,7 @@ const FAQSection = () => {
               <AccordionItem
                 key={index}
                 value={`item-${index}`}
-                className="glass-card rounded-xl px-6 border-0 data-[state=open]:shadow-glow"
+                className="glass-card rounded-xl px-6 border-0 data-[state=open]:shadow-glow hover-glow transition-all duration-300"
               >
                 <AccordionTrigger className="text-left hover:no-underline py-5 text-base font-semibold">
                   {faq.question}
