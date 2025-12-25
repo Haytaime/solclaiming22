@@ -25,23 +25,28 @@ const TransactionsSection = () => {
   );
 
   return (
-    <section id="proof" className="py-20 bg-card/30">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          Transactions récentes
-        </h2>
+    <section id="proof" className="py-24 lg:py-32 bg-surface-elevated/30">
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="font-display text-display-sm md:text-display-md mb-6 text-balance">
+            Transactions <span className="text-gradient">récentes</span>
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Suivez toutes les transactions en temps réel.
+          </p>
+        </div>
 
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           {/* Filter tabs */}
-          <div className="flex justify-center gap-2 mb-8">
+          <div className="flex justify-center gap-2 mb-10">
             {(["all", "claim", "burn"] as const).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   filter === f
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                    ? "bg-gradient-to-r from-primary to-primary-light text-primary-foreground shadow-glow"
+                    : "glass-card text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {f === "all" ? "Toutes" : f.charAt(0).toUpperCase() + f.slice(1)}
@@ -54,39 +59,39 @@ const TransactionsSection = () => {
             {filteredTransactions.map((tx, index) => (
               <div
                 key={index}
-                className="p-4 rounded-xl bg-card border border-border hover:border-primary/30 transition-all"
+                className="p-5 rounded-2xl glass-card hover-lift"
               >
                 <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      tx.type === "claim" ? "bg-green-500/20" : "bg-orange-500/20"
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                      tx.type === "claim" ? "bg-emerald-500/20" : "bg-amber-500/20"
                     }`}>
                       {tx.type === "claim" ? (
-                        <ArrowDown className={`w-5 h-5 ${tx.type === "claim" ? "text-green-500" : "text-orange-500"}`} />
+                        <ArrowDown className="w-6 h-6 text-emerald-500" />
                       ) : (
-                        <Flame className="w-5 h-5 text-orange-500" />
+                        <Flame className="w-6 h-6 text-amber-500" />
                       )}
                     </div>
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium capitalize">{tx.type}</span>
-                        <span className={`px-2 py-0.5 rounded text-xs ${
+                      <div className="flex items-center gap-2.5">
+                        <span className="font-semibold capitalize">{tx.type}</span>
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
                           tx.status === "success" 
-                            ? "bg-green-500/20 text-green-500" 
-                            : "bg-yellow-500/20 text-yellow-500"
+                            ? "bg-emerald-500/20 text-emerald-400" 
+                            : "bg-amber-500/20 text-amber-400"
                         }`}>
                           {tx.status === "success" ? "Réussie" : "En attente"}
                         </span>
                       </div>
-                      <div className="text-sm text-muted-foreground">
-                        Hash: <code className="text-primary">{tx.hash}</code>
+                      <div className="text-sm text-muted-foreground mt-1">
+                        Hash: <code className="text-primary font-mono">{tx.hash}</code>
                       </div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-semibold">{tx.amount} SOL</div>
-                    <div className="text-sm text-muted-foreground flex items-center gap-1 justify-end">
-                      <Clock className="w-3 h-3" />
+                    <div className="font-display font-bold text-lg">{tx.amount} <span className="text-muted-foreground">SOL</span></div>
+                    <div className="text-sm text-muted-foreground flex items-center gap-1.5 justify-end mt-1">
+                      <Clock className="w-3.5 h-3.5" />
                       {tx.date}
                     </div>
                   </div>
@@ -95,10 +100,10 @@ const TransactionsSection = () => {
                   href={`https://solscan.io/tx/${tx.hash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 mt-3 text-sm text-primary hover:underline"
+                  className="inline-flex items-center gap-1.5 mt-4 text-sm text-primary font-medium hover:text-primary-light transition-colors"
                 >
                   Voir sur Solscan
-                  <ExternalLink className="w-3 h-3" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             ))}

@@ -7,23 +7,28 @@ const ClaimBurnInterface = () => {
   const [amount, setAmount] = useState("");
 
   return (
-    <section id="claim" className="py-20">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          Interface Claim / Burn
-        </h2>
+    <section id="claim" className="py-24 lg:py-32">
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="font-display text-display-sm md:text-display-md mb-6 text-balance">
+            Interface <span className="text-gradient">Claim / Burn</span>
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Gérez vos SOL directement depuis cette interface sécurisée.
+          </p>
+        </div>
 
-        <div className="max-w-md mx-auto">
-          <div className="p-6 rounded-2xl bg-card border border-border">
+        <div className="max-w-lg mx-auto">
+          <div className="p-8 rounded-3xl glass-card">
             {/* Mode selector */}
-            <div className="mb-6">
-              <label className="block text-sm text-muted-foreground mb-2">Mode</label>
-              <div className="flex rounded-lg bg-secondary p-1">
+            <div className="mb-8">
+              <label className="block text-sm text-muted-foreground mb-3 font-medium">Mode</label>
+              <div className="flex rounded-xl bg-muted/50 p-1.5">
                 <button
                   onClick={() => setMode("claim")}
-                  className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                  className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${
                     mode === "claim"
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-gradient-to-r from-primary to-primary-light text-primary-foreground shadow-glow"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -31,9 +36,9 @@ const ClaimBurnInterface = () => {
                 </button>
                 <button
                   onClick={() => setMode("burn")}
-                  className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                  className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${
                     mode === "burn"
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-gradient-to-r from-primary to-primary-light text-primary-foreground shadow-glow"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -43,8 +48,8 @@ const ClaimBurnInterface = () => {
             </div>
 
             {/* Amount input */}
-            <div className="mb-6">
-              <label className="block text-sm text-muted-foreground mb-2">
+            <div className="mb-8">
+              <label className="block text-sm text-muted-foreground mb-3 font-medium">
                 Quantité (SOL)
               </label>
               <div className="relative">
@@ -53,16 +58,16 @@ const ClaimBurnInterface = () => {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full bg-secondary border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full bg-muted/50 border border-border/50 rounded-xl px-5 py-4 text-lg font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-primary hover:underline">
+                <button className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-primary font-semibold hover:text-primary-light transition-colors">
                   Max
                 </button>
               </div>
             </div>
 
             {/* Connect button */}
-            <Button variant="cyan" size="lg" className="w-full">
+            <Button variant="premium" size="xl" className="w-full">
               {mode === "claim" ? (
                 <>
                   <ArrowDown className="w-5 h-5" />
