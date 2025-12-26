@@ -31,7 +31,7 @@ const HeroSection = () => {
           {/* Main heading */}
           <h1 className="font-display text-display-md md:text-display-lg lg:text-display-xl mb-8 animate-slide-up text-balance">
             {t('hero.title1')}{" "}
-            <span className="text-gradient">SOL</span>
+            <span className="text-gradient tracking-[0.02em]">SOL</span>
             <br className="hidden sm:block" />
             <span className="text-foreground"> {t('hero.title2')}</span>
           </h1>
