@@ -15,18 +15,28 @@ const TransactionsSection = () => {
   const { t } = useLanguage();
 
   const transactions: Transaction[] = [
-    { type: "claim", status: "success", hash: "5X7gH...kL9pM", amount: "2.45", hoursAgo: 1 },
-    { type: "burn", status: "success", hash: "8K2nP...qR5tW", amount: "0.87", hoursAgo: 3 },
-    { type: "claim", status: "success", hash: "3M9vX...bN4cY", amount: "5.12", hoursAgo: 8 },
-    { type: "burn", status: "pending", hash: "7D4hJ...fG8kL", amount: "1.23", hoursAgo: 26 },
-    { type: "claim", status: "success", hash: "9P6rT...wE2mN", amount: "3.67", hoursAgo: 52 },
+    { type: "claim", status: "success", hash: "5X7gH...kL9pM", amount: "2.45", hoursAgo: 0.5 },
+    { type: "burn", status: "success", hash: "8K2nP...qR5tW", amount: "0.87", hoursAgo: 1 },
+    { type: "claim", status: "success", hash: "3M9vX...bN4cY", amount: "5.12", hoursAgo: 2 },
+    { type: "burn", status: "pending", hash: "7D4hJ...fG8kL", amount: "1.23", hoursAgo: 3 },
+    { type: "claim", status: "success", hash: "9P6rT...wE2mN", amount: "3.67", hoursAgo: 5 },
+    { type: "burn", status: "success", hash: "2L8mQ...xH4nR", amount: "0.45", hoursAgo: 7 },
+    { type: "claim", status: "success", hash: "6N3kW...pT9vY", amount: "1.89", hoursAgo: 12 },
+    { type: "burn", status: "success", hash: "4R7jF...mC2bX", amount: "2.34", hoursAgo: 18 },
+    { type: "claim", status: "success", hash: "1Y5sG...dK6wZ", amount: "4.56", hoursAgo: 24 },
+    { type: "burn", status: "success", hash: "8B9eP...hL3qM", amount: "0.78", hoursAgo: 36 },
+    { type: "claim", status: "success", hash: "3V2nT...rA7kJ", amount: "6.12", hoursAgo: 48 },
+    { type: "burn", status: "pending", hash: "7M4xC...sF9pL", amount: "1.45", hoursAgo: 52 },
+    { type: "claim", status: "success", hash: "5K8wR...yB2nQ", amount: "3.21", hoursAgo: 72 },
+    { type: "burn", status: "success", hash: "9G1jH...tC5mV", amount: "0.99", hoursAgo: 96 },
+    { type: "claim", status: "success", hash: "2D6pL...xN8kS", amount: "7.89", hoursAgo: 120 },
   ];
 
   const getTimeAgo = (hoursAgo: number): string => {
     if (hoursAgo < 1) {
       return t('tx.ago.minutes', { n: Math.floor(hoursAgo * 60) });
     } else if (hoursAgo < 24) {
-      return t('tx.ago.hours', { n: hoursAgo });
+      return t('tx.ago.hours', { n: Math.floor(hoursAgo) });
     } else {
       return t('tx.ago.days', { n: Math.floor(hoursAgo / 24) });
     }
@@ -40,8 +50,8 @@ const TransactionsSection = () => {
     <section id="proof" className="py-24 lg:py-32 bg-surface-elevated/30">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="font-display text-display-sm md:text-display-md mb-6 text-balance">
-            {t('tx.title')} <span className="text-gradient">{t('tx.title2')}</span>
+          <h2 className="font-display text-display-sm md:text-display-md mb-6 text-balance tracking-[0.01em]">
+            {t('tx.title')} <span className="text-gradient tracking-[0.02em]">{t('tx.title2')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t('tx.subtitle')}
