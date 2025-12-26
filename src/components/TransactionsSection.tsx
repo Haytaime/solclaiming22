@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ExternalLink, ArrowDown, Flame, Clock } from "lucide-react";
+import { ExternalLink, ArrowDown, Flame, Clock, ChevronDown } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
 
 interface Transaction {
   type: "claim" | "burn";
@@ -12,24 +13,28 @@ interface Transaction {
 
 const TransactionsSection = () => {
   const [filter, setFilter] = useState<"all" | "claim" | "burn">("all");
+  const [showAll, setShowAll] = useState(false);
   const { t } = useLanguage();
 
   const transactions: Transaction[] = [
-    { type: "claim", status: "success", hash: "5X7gH...kL9pM", amount: "2.45", hoursAgo: 0.5 },
-    { type: "burn", status: "success", hash: "8K2nP...qR5tW", amount: "0.87", hoursAgo: 1 },
-    { type: "claim", status: "success", hash: "3M9vX...bN4cY", amount: "5.12", hoursAgo: 2 },
-    { type: "burn", status: "pending", hash: "7D4hJ...fG8kL", amount: "1.23", hoursAgo: 3 },
-    { type: "claim", status: "success", hash: "9P6rT...wE2mN", amount: "3.67", hoursAgo: 5 },
-    { type: "burn", status: "success", hash: "2L8mQ...xH4nR", amount: "0.45", hoursAgo: 7 },
-    { type: "claim", status: "success", hash: "6N3kW...pT9vY", amount: "1.89", hoursAgo: 12 },
-    { type: "burn", status: "success", hash: "4R7jF...mC2bX", amount: "2.34", hoursAgo: 18 },
-    { type: "claim", status: "success", hash: "1Y5sG...dK6wZ", amount: "4.56", hoursAgo: 24 },
-    { type: "burn", status: "success", hash: "8B9eP...hL3qM", amount: "0.78", hoursAgo: 36 },
-    { type: "claim", status: "success", hash: "3V2nT...rA7kJ", amount: "6.12", hoursAgo: 48 },
-    { type: "burn", status: "pending", hash: "7M4xC...sF9pL", amount: "1.45", hoursAgo: 52 },
-    { type: "claim", status: "success", hash: "5K8wR...yB2nQ", amount: "3.21", hoursAgo: 72 },
-    { type: "burn", status: "success", hash: "9G1jH...tC5mV", amount: "0.99", hoursAgo: 96 },
-    { type: "claim", status: "success", hash: "2D6pL...xN8kS", amount: "7.89", hoursAgo: 120 },
+    { type: "claim", status: "success", hash: "5X7gH...kL9pM", amount: "0.24", hoursAgo: 0.5 },
+    { type: "burn", status: "success", hash: "8K2nP...qR5tW", amount: "0.08", hoursAgo: 1 },
+    { type: "claim", status: "success", hash: "3M9vX...bN4cY", amount: "0.52", hoursAgo: 2 },
+    { type: "burn", status: "pending", hash: "7D4hJ...fG8kL", amount: "0.13", hoursAgo: 3 },
+    { type: "claim", status: "success", hash: "9P6rT...wE2mN", amount: "0.67", hoursAgo: 5 },
+    { type: "burn", status: "success", hash: "2L8mQ...xH4nR", amount: "0.04", hoursAgo: 7 },
+    { type: "claim", status: "success", hash: "6N3kW...pT9vY", amount: "0.19", hoursAgo: 12 },
+    { type: "burn", status: "success", hash: "4R7jF...mC2bX", amount: "0.34", hoursAgo: 18 },
+    { type: "claim", status: "success", hash: "1Y5sG...dK6wZ", amount: "0.56", hoursAgo: 24 },
+    { type: "burn", status: "success", hash: "8B9eP...hL3qM", amount: "0.07", hoursAgo: 36 },
+    { type: "claim", status: "success", hash: "3V2nT...rA7kJ", amount: "0.12", hoursAgo: 48 },
+    { type: "burn", status: "pending", hash: "7M4xC...sF9pL", amount: "0.45", hoursAgo: 52 },
+    { type: "claim", status: "success", hash: "5K8wR...yB2nQ", amount: "0.31", hoursAgo: 72 },
+    { type: "burn", status: "success", hash: "9G1jH...tC5mV", amount: "0.09", hoursAgo: 96 },
+    { type: "claim", status: "success", hash: "2D6pL...xN8kS", amount: "0.78", hoursAgo: 120 },
+    { type: "burn", status: "success", hash: "4F3nM...wQ7tK", amount: "0.02", hoursAgo: 144 },
+    { type: "claim", status: "success", hash: "8H5rJ...bL9mP", amount: "0.41", hoursAgo: 168 },
+    { type: "burn", status: "success", hash: "1T8vX...cN2wS", amount: "0.15", hoursAgo: 192 },
   ];
 
   const getTimeAgo = (hoursAgo: number): string => {
@@ -45,6 +50,9 @@ const TransactionsSection = () => {
   const filteredTransactions = transactions.filter(
     (tx) => filter === "all" || tx.type === filter
   );
+
+  const displayedTransactions = showAll ? filteredTransactions : filteredTransactions.slice(0, 5);
+  const hasMore = filteredTransactions.length > 5;
 
   return (
     <section id="proof" className="py-24 lg:py-32 bg-surface-elevated/30">
@@ -64,7 +72,10 @@ const TransactionsSection = () => {
             {(["all", "claim", "burn"] as const).map((f) => (
               <button
                 key={f}
-                onClick={() => setFilter(f)}
+                onClick={() => {
+                  setFilter(f);
+                  setShowAll(false);
+                }}
                 className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 hover-scale ${
                   filter === f
                     ? "bg-gradient-to-r from-primary to-primary-light text-primary-foreground shadow-glow"
@@ -78,7 +89,7 @@ const TransactionsSection = () => {
 
           {/* Transactions list */}
           <div className="space-y-4">
-            {filteredTransactions.map((tx, index) => (
+            {displayedTransactions.map((tx, index) => (
               <div
                 key={index}
                 className="p-5 rounded-2xl glass-card hover-lift"
@@ -130,6 +141,21 @@ const TransactionsSection = () => {
               </div>
             ))}
           </div>
+
+          {/* View more button */}
+          {hasMore && (
+            <div className="flex justify-center mt-8">
+              <Button
+                variant="premium-outline"
+                size="lg"
+                onClick={() => setShowAll(!showAll)}
+                className="group"
+              >
+                {showAll ? 'Voir moins' : 'Voir plus'}
+                <ChevronDown className={`w-4 h-4 ml-2 transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </section>

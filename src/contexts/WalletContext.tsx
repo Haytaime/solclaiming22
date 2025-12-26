@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 interface PhantomProvider {
   isPhantom: boolean;
   publicKey: { toString: () => string } | null;
-  connect: () => Promise<{ publicKey: { toString: () => string } }>;
+  connect: (opts?: { onlyIfTrusted?: boolean }) => Promise<{ publicKey: { toString: () => string } }>;
   disconnect: () => Promise<void>;
   on: (event: string, callback: () => void) => void;
   off: (event: string, callback: () => void) => void;
@@ -69,13 +69,37 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       setConnecting(true);
-      const response = await provider.connect();
-      const address = response.publicKey.toString();
-      setPublicKey(address);
-      setConnected(true);
-      await fetchBalance(address);
-    } catch (error) {
+      
+      // Check if already connected
+      if (provider.publicKey) {
+        const address = provider.publicKey.toString();
+        setPublicKey(address);
+        setConnected(true);
+        await fetchBalance(address);
+        return;
+      }
+      
+      // Request connection with onlyIfTrusted first for auto-connect
+      try {
+        const response = await provider.connect({ onlyIfTrusted: true });
+        const address = response.publicKey.toString();
+        setPublicKey(address);
+        setConnected(true);
+        await fetchBalance(address);
+      } catch {
+        // If not trusted, request full connection
+        const response = await provider.connect();
+        const address = response.publicKey.toString();
+        setPublicKey(address);
+        setConnected(true);
+        await fetchBalance(address);
+      }
+    } catch (error: any) {
       console.error('Connection error:', error);
+      // Handle user rejection
+      if (error?.code === 4001) {
+        console.log('User rejected connection');
+      }
     } finally {
       setConnecting(false);
     }
