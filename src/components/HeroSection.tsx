@@ -1,14 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Wallet, Sparkles } from "lucide-react";
+import { ArrowRight, Wallet } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useWallet } from "@/contexts/WalletContext";
-
 const HeroSection = () => {
-  const { t } = useLanguage();
-  const { connect, connected, connecting } = useWallet();
-
-  return (
-    <section id="accueil" className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden grain-overlay">
+  const {
+    t
+  } = useLanguage();
+  const {
+    connect,
+    connected,
+    connecting
+  } = useWallet();
+  return <section id="accueil" className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden grain-overlay">
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-primary/8 rounded-full blur-[180px] animate-pulse-subtle" />
@@ -34,31 +37,31 @@ const HeroSection = () => {
           </h1>
 
           {/* Subheading */}
-          <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed animate-slide-up text-balance" style={{ animationDelay: "0.1s" }}>
+          <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed animate-slide-up text-balance" style={{
+          animationDelay: "0.1s"
+        }}>
             {t('hero.subtitle')}
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-slide-up" style={{ animationDelay: "0.2s" }}>
-            <Button 
-              variant="premium" 
-              size="xl" 
-              className="w-full sm:w-auto group"
-              onClick={connect}
-              disabled={connecting || connected}
-            >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-slide-up" style={{
+          animationDelay: "0.2s"
+        }}>
+            <Button variant="premium" size="xl" className="w-full sm:w-auto group" onClick={connect} disabled={connecting || connected}>
               <Wallet className="w-5 h-5 group-hover:scale-110 transition-transform" />
               {connected ? t('header.connected') : connecting ? '...' : t('hero.cta')}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button variant="premium-outline" size="xl" className="w-full sm:w-auto group">
               {t('hero.learn')}
-              <Sparkles className="w-4 h-4 group-hover:scale-110 transition-transform" />
+              
             </Button>
           </div>
 
           {/* Features badges */}
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 animate-slide-up" style={{ animationDelay: "0.3s" }}>
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 animate-slide-up" style={{
+          animationDelay: "0.3s"
+        }}>
             <div className="flex items-center gap-2.5 hover-scale cursor-default">
               <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_hsl(142_76%_45%/0.5)]" />
               <span className="text-sm text-muted-foreground font-medium">{t('hero.opensource')}</span>
@@ -74,8 +77,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
