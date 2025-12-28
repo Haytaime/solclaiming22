@@ -1,0 +1,4 @@
+project_id = "pukbntfqpdpwfxjrfazw"
+
+[functions.get-solana-balance]
+verify_jwt = false

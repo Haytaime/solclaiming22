@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PhantomProvider {
   isPhantom: boolean;
@@ -44,67 +45,36 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const fetchBalance = async (address: string) => {
-    const candidates = [
-      // CORS-friendly public RPCs (mainnet)
-      'https://rpc.ankr.com/solana',
-      'https://solana-api.projectserum.com',
-      'https://api.mainnet-beta.solana.com',
-      // If the user wallet is on devnet/testnet, these will match Phantom's shown balance there
-      'https://api.devnet.solana.com',
-      'https://api.testnet.solana.com',
-      // fallback
-      'https://solana-mainnet.g.alchemy.com/v2/demo',
-    ];
-
-    const getBalanceFromEndpoint = async (endpoint: string): Promise<number | null> => {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 8000);
-
-      try {
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            jsonrpc: '2.0',
-            id: 1,
-            method: 'getBalance',
-            params: [address],
-          }),
-          signal: controller.signal,
-        });
-
-        if (!response.ok) return null;
-        const data = await response.json();
-        const lamports = data?.result?.value;
-        if (typeof lamports !== 'number') return null;
-        return lamports / 1e9;
-      } catch {
-        return null;
-      } finally {
-        clearTimeout(timeout);
-      }
-    };
-
     try {
-      const results = await Promise.allSettled(candidates.map(getBalanceFromEndpoint));
-      const balances = results
-        .filter((r): r is PromiseFulfilledResult<number | null> => r.status === 'fulfilled')
-        .map((r) => r.value)
-        .filter((v): v is number => typeof v === 'number');
+      console.log('Fetching balance via edge function for:', address);
+      
+      const { data, error } = await supabase.functions.invoke('get-solana-balance', {
+        body: { address }
+      });
 
-      if (balances.length === 0) {
+      if (error) {
+        console.error('Edge function error:', error);
         setBalance(null);
         toast({
           title: 'Solde indisponible',
-          description: "Impossible de récupérer le solde SOL (RPC). Réessaie dans quelques secondes.",
+          description: "Impossible de récupérer le solde SOL. Réessaie dans quelques secondes.",
           variant: 'destructive',
         });
         return;
       }
 
-      // Take the highest balance returned across clusters/endpoints.
-      // (This avoids showing 0 when the wallet is on devnet/testnet.)
-      setBalance(Math.max(...balances));
+      if (data?.balance !== undefined && data?.balance !== null) {
+        console.log('Balance fetched successfully:', data.balance, 'SOL');
+        setBalance(data.balance);
+      } else if (data?.error) {
+        console.error('Balance fetch error:', data.error);
+        setBalance(null);
+        toast({
+          title: 'Solde indisponible',
+          description: "Les serveurs RPC Solana sont indisponibles. Réessaie plus tard.",
+          variant: 'destructive',
+        });
+      }
     } catch (error) {
       console.error('Error fetching balance:', error);
       setBalance(null);
