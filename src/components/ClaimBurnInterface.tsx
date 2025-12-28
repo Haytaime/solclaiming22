@@ -8,7 +8,7 @@ const ClaimBurnInterface = () => {
   const [mode, setMode] = useState<"claim" | "burn">("claim");
   const [amount, setAmount] = useState("");
   const { t } = useLanguage();
-  const { connected, balance, connect, connecting } = useWallet();
+  const { connected, balance, connect, connecting, signed } = useWallet();
 
   // Calcul des montants basés sur le solde réel
   const transactionFee = 0.02;
@@ -29,8 +29,8 @@ const ClaimBurnInterface = () => {
 
         <div className="max-w-lg mx-auto">
           <div className="p-8 rounded-3xl glass-card hover-glow">
-            {/* Balance display when connected */}
-            {connected && balance !== null && (
+            {/* Balance display when connected and signed */}
+            {connected && signed && balance !== null && (
               <div className="mb-6 space-y-3">
                 <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
                   <div className="flex items-center justify-between">
