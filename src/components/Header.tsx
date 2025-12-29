@@ -7,7 +7,7 @@ import { useWallet } from "@/contexts/WalletContext";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
-  const { connected, publicKey, balance, connecting, connect, disconnect } = useWallet();
+  const { connected, publicKey, balance, fetchingBalance, connecting, connect, disconnect } = useWallet();
 
   const navItems = [
     { label: t('nav.home'), href: "#accueil" },
@@ -70,7 +70,7 @@ const Header = () => {
                 <div className="px-4 py-2 rounded-xl glass-card text-sm">
                   <span className="text-muted-foreground">{t('interface.balance')}:</span>{' '}
                   <span className="font-mono font-semibold text-primary">
-                    {balance !== null ? balance.toFixed(4) : '...'} SOL
+                    {fetchingBalance ? '...' : balance !== null ? balance.toFixed(4) : '--'} SOL
                   </span>
                 </div>
                 <Button 
@@ -139,7 +139,7 @@ const Header = () => {
                   <div className="px-4 py-2 rounded-xl glass-card text-sm">
                     <span className="text-muted-foreground">{t('interface.balance')}:</span>{' '}
                     <span className="font-mono font-semibold text-primary">
-                      {balance !== null ? balance.toFixed(4) : '...'} SOL
+                      {fetchingBalance ? '...' : balance !== null ? balance.toFixed(4) : '--'} SOL
                     </span>
                   </div>
                   <Button variant="premium-outline" size="lg" className="w-full" onClick={disconnect}>

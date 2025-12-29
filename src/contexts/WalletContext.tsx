@@ -22,6 +22,7 @@ interface WalletContextType {
   connected: boolean;
   publicKey: string | null;
   balance: number | null;
+  fetchingBalance: boolean;
   connecting: boolean;
   signed: boolean;
   connect: () => Promise<void>;
@@ -34,6 +35,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [connected, setConnected] = useState(false);
   const [publicKey, setPublicKey] = useState<string | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
+  const [fetchingBalance, setFetchingBalance] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [signed, setSigned] = useState(false);
 
@@ -44,45 +46,57 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     return undefined;
   };
 
-  const fetchBalance = async (address: string) => {
+  const fetchBalance = async (address: string, opts?: { silent?: boolean }) => {
+    const silent = opts?.silent ?? false;
+
     try {
+      setFetchingBalance(true);
       console.log('Fetching balance via edge function for:', address);
-      
+
       const { data, error } = await supabase.functions.invoke('get-solana-balance', {
-        body: { address }
+        body: { address },
       });
 
       if (error) {
         console.error('Edge function error:', error);
         setBalance(null);
-        toast({
-          title: 'Solde indisponible',
-          description: "Impossible de récupérer le solde SOL. Réessaie dans quelques secondes.",
-          variant: 'destructive',
-        });
+        if (!silent) {
+          toast({
+            title: 'Solde indisponible',
+            description: "Impossible de récupérer le solde SOL. Réessaie dans quelques secondes.",
+            variant: 'destructive',
+          });
+        }
         return;
       }
 
-      if (data?.balance !== undefined && data?.balance !== null) {
+      if (typeof data?.balance === 'number') {
         console.log('Balance fetched successfully:', data.balance, 'SOL');
         setBalance(data.balance);
-      } else if (data?.error) {
-        console.error('Balance fetch error:', data.error);
-        setBalance(null);
+        return;
+      }
+
+      console.error('Balance fetch unexpected response:', data);
+      setBalance(null);
+      if (!silent) {
         toast({
           title: 'Solde indisponible',
-          description: "Les serveurs RPC Solana sont indisponibles. Réessaie plus tard.",
+          description: "Impossible de récupérer le solde SOL. Réessaie plus tard.",
           variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Error fetching balance:', error);
       setBalance(null);
-      toast({
-        title: 'Solde indisponible',
-        description: "Impossible de récupérer le solde SOL. Réessaie dans quelques secondes.",
-        variant: 'destructive',
-      });
+      if (!silent) {
+        toast({
+          title: 'Solde indisponible',
+          description: "Impossible de récupérer le solde SOL. Réessaie dans quelques secondes.",
+          variant: 'destructive',
+        });
+      }
+    } finally {
+      setFetchingBalance(false);
     }
   };
 
@@ -142,6 +156,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         setConnected(false);
         setPublicKey(null);
         setBalance(null);
+        setFetchingBalance(false);
         setSigned(false);
       }
     } catch (error: any) {
@@ -163,6 +178,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     setConnected(false);
     setPublicKey(null);
     setBalance(null);
+    setFetchingBalance(false);
     setSigned(false);
   };
 
@@ -173,6 +189,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         setConnected(false);
         setPublicKey(null);
         setBalance(null);
+        setFetchingBalance(false);
         setSigned(false);
       };
 
@@ -181,6 +198,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         setConnected(false);
         setPublicKey(null);
         setBalance(null);
+        setFetchingBalance(false);
         setSigned(false);
       };
 
@@ -199,14 +217,14 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     if (connected && publicKey && signed) {
       fetchBalance(publicKey);
       const interval = setInterval(() => {
-        fetchBalance(publicKey);
+        fetchBalance(publicKey, { silent: true });
       }, 15000); // Refresh every 15 seconds
       return () => clearInterval(interval);
     }
   }, [connected, publicKey, signed]);
 
   return (
-    <WalletContext.Provider value={{ connected, publicKey, balance, connecting, signed, connect, disconnect }}>
+    <WalletContext.Provider value={{ connected, publicKey, balance, fetchingBalance, connecting, signed, connect, disconnect }}>
       {children}
     </WalletContext.Provider>
   );
