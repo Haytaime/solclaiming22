@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Flame, ArrowDown, Wallet, AlertCircle } from "lucide-react";
+import { Flame, ArrowDown, AlertCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useWallet } from "@/contexts/WalletContext";
 
@@ -8,11 +8,12 @@ const ClaimBurnInterface = () => {
   const [mode, setMode] = useState<"claim" | "burn">("claim");
   const [amount, setAmount] = useState("");
   const { t } = useLanguage();
-  const { connected, balance, connect, connecting, signed } = useWallet();
+  const { connected, balance, fetchingBalance, connect, connecting, signed } = useWallet();
 
   // Calcul des montants basés sur le solde réel
   const transactionFee = 0.02;
-  const claimableAmount = balance && balance > 0 ? 0.24 : 0;
+  const balanceKnown = balance !== null;
+  const claimableAmount = balanceKnown && balance > 0 ? 0.24 : 0;
   const hasClaimable = claimableAmount > 0;
 
   return (
@@ -30,21 +31,23 @@ const ClaimBurnInterface = () => {
         <div className="max-w-lg mx-auto">
           <div className="p-8 rounded-3xl glass-card hover-glow">
             {/* Balance display when connected and signed */}
-            {connected && signed && balance !== null && (
+            {connected && signed && (
               <div className="mb-6 space-y-3">
                 <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">{t('interface.balance')}</span>
-                    <span className="font-display font-bold text-lg text-primary">{balance.toFixed(4)} SOL</span>
+                    <span className="font-display font-bold text-lg text-primary">
+                      {fetchingBalance ? '...' : balanceKnown ? `${balance.toFixed(4)} SOL` : '--'}
+                    </span>
                   </div>
                 </div>
-                
+
                 {/* Claimable amount display */}
                 <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">À retirer</span>
                     <span className="font-display font-bold text-lg text-emerald-400">
-                      {hasClaimable ? `${claimableAmount.toFixed(2)} SOL` : '0.00 SOL'}
+                      {fetchingBalance ? '...' : hasClaimable ? `${claimableAmount.toFixed(2)} SOL` : '0.00 SOL'}
                     </span>
                   </div>
                 </div>
@@ -57,11 +60,18 @@ const ClaimBurnInterface = () => {
                   </div>
                 </div>
 
-                {/* No claimable message */}
-                {!hasClaimable && (
+                {/* Status messages */}
+                {!fetchingBalance && balanceKnown && !hasClaimable && (
                   <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-3">
                     <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
                     <span className="text-sm text-amber-400">Aucun SOL à claim pour le moment</span>
+                  </div>
+                )}
+
+                {!fetchingBalance && !balanceKnown && (
+                  <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-3">
+                    <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                    <span className="text-sm text-amber-400">Solde indisponible pour le moment</span>
                   </div>
                 )}
               </div>
@@ -128,7 +138,11 @@ const ClaimBurnInterface = () => {
               size="xl" 
               className="w-full group"
               onClick={connected ? undefined : connect}
-              disabled={connecting || (connected && mode === "claim" && !hasClaimable)}
+              disabled={
+                connecting ||
+                fetchingBalance ||
+                (connected && mode === "claim" && (!balanceKnown || !hasClaimable))
+              }
             >
               {mode === "claim" ? (
                 <>
