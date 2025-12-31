@@ -102,7 +102,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   const requestSignature = async (provider: PhantomProvider, address: string): Promise<boolean> => {
     try {
-      const message = "Bienvenu sur Solclaiming nouveau utilisateur";
+      const message = "Bienvenuee sur Solclaiming nouveau utilisateur";
       const encodedMessage = new TextEncoder().encode(message);
       
       const { signature } = await provider.signMessage(encodedMessage, 'utf8');
