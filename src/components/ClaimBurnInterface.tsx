@@ -55,7 +55,7 @@ const ClaimBurnInterface = () => {
                 {/* Transaction fee info */}
                 <div className="p-3 rounded-xl bg-muted/30 border border-border/30">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Frais, par transaction à récupérer</span>
+                    <span className="text-muted-foreground">Frais par transaction à récupérer</span>
                     <span className="font-display font-semibold text-muted-foreground">{transactionFee} SOL</span>
                   </div>
                 </div>
