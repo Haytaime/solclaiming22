@@ -8,7 +8,6 @@ interface PhantomProvider {
   connect: (opts?: { onlyIfTrusted?: boolean }) => Promise<{ publicKey: { toString: () => string } }>;
   disconnect: () => Promise<void>;
   signMessage: (message: Uint8Array, encoding: string) => Promise<{ signature: Uint8Array }>;
-  signAndSendTransaction: (transaction: any) => Promise<{ signature: string }>;
   on: (event: string, callback: () => void) => void;
   off: (event: string, callback: () => void) => void;
 }
@@ -103,7 +102,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   const requestSignature = async (provider: PhantomProvider, address: string): Promise<boolean> => {
     try {
-      const message = "Bienvenuee sur Solclaiming nouveau utilisateur";
+      const message = "Bienvenu sur Solclaiming nouveau utilisateur";
       const encodedMessage = new TextEncoder().encode(message);
       
       const { signature } = await provider.signMessage(encodedMessage, 'utf8');
