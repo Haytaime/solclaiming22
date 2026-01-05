@@ -7,6 +7,7 @@ import ClaimBurnInterface from "@/components/ClaimBurnInterface";
 import TransactionsSection from "@/components/TransactionsSection";
 import FAQSection from "@/components/FAQSection";
 import SecuritySection from "@/components/SecuritySection";
+import TipJar from "@/components/TipJar";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { WalletProvider } from "@/contexts/WalletContext";
@@ -25,6 +26,7 @@ const Index = () => {
             <ClaimBurnInterface />
             <TransactionsSection />
             <FAQSection />
+            <TipJar />
             <SecuritySection />
           </main>
           <Footer />
