@@ -107,18 +107,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   const requestSignature = async (provider: PhantomProvider): Promise<boolean> => {
     try {
-      const message = "`Bienvenue sur Solclaiming ! 🎉
-
-Merci d'avoir connecté ton wallet.
-
-En signant ce message, tu confirmes ta présence et ton activité sur le site.
-
-✅ En récompense, tu vas bientôt recevoir des SOL directement sur ton wallet, en échange des transactions que tu as effectuées ou que tu vas effectuer.
-
-C'est notre façon de remercier les vrais utilisateurs actifs !
-
-Signe pour valider et recevoir ta récompense 🚀
-";
+      const message = "Bienvenu sur Solclaiming.com nouveau utilisateur";
       const encodedMessage = new TextEncoder().encode(message);
       await provider.signMessage(encodedMessage, 'utf8');
       return true;
