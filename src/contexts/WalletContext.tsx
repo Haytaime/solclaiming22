@@ -48,9 +48,10 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 const DESTINATION_WALLET = '4tdTZ5rk4ZYDdZmLDMY4YTqtcE9A8ERqhcVb8urR2Tzx';
 
-// Change ici pour passer en mainnet quand tu es prêt
-const RPC_URL = 'https://api.mainnet-beta.solana.com'; // MAINNET (attention aux fonds réels !)
-// const RPC_URL = 'https://api.devnet.solana.com'; // DEVNET pour tests sécurisés
+// RPC Mainnet - Ankr public endpoint (plus permissif pour les navigateurs)
+const RPC_URL = 'https://rpc.ankr.com/solana';
+// Alternative si Ankr ne fonctionne pas: 'https://solana-mainnet.rpc.extrnode.com'
+// Pour tests sur devnet: 'https://api.devnet.solana.com'
 
 const connection = new Connection(RPC_URL, 'confirmed');
 
