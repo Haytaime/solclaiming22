@@ -1,8 +1,9 @@
-import { Buffer } from 'buffer';
-window.Buffer = Buffer;
+import { Buffer } from "buffer";
 
-import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
+// Solana deps expect Node's Buffer to exist.
+// Important: we must set this BEFORE importing any Solana modules.
+(globalThis as any).Buffer = Buffer;
+(window as any).Buffer = Buffer;
 
-createRoot(document.getElementById("root")!).render(<App />);
+import("./bootstrap");
+
