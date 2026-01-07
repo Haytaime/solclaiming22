@@ -45,7 +45,7 @@ const ClaimBurnInterface = () => {
                 {/* Claimable amount display */}
                 <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">À retirer</span>
+                    <span className="text-sm text-muted-foreground">{t('interface.claimable')}</span>
                     <span className="font-display font-bold text-lg text-emerald-400">
                       {fetchingBalance ? '...' : hasClaimable ? `${claimableAmount.toFixed(2)} SOL` : '0.00 SOL'}
                     </span>

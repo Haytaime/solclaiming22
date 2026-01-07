@@ -72,6 +72,7 @@ export const translations: Translations = {
   'interface.amount': { fr: 'Quantité (SOL)', en: 'Amount (SOL)' },
   'interface.connect': { fr: 'Connecter votre wallet', en: 'Connect your wallet' },
   'interface.balance': { fr: 'Solde', en: 'Balance' },
+  'interface.claimable': { fr: 'À récupérer', en: 'To claim' },
 
   // Transactions
   'tx.title': { fr: 'Transactions', en: 'Recent' },
